@@ -106,14 +106,3 @@ git push origin main
 
 ---
 
-## 💬 What to Say in Viva
-
-- *"GreenPulse is a plant tracker built with Flask, containerized using Docker, and deployed via GitHub Actions."*
-- *"The CI/CD pipeline has three stages: build & test, Docker build, and deploy — all automated on every push."*
-- *"Docker Compose runs two replicas of the app behind an Nginx reverse proxy — this is orchestration."*
-- *"Terraform provisions the Docker container as Infrastructure as Code — fully reproducible."*
-- *"Ansible automates the full deployment — install, build, and run — without manual steps."*
-
----
-
-Built with ❤️ as a DevOps learning project.
