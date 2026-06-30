@@ -1,0 +1,64 @@
+---
+# ================================================================
+# GreenPulse — Ansible Deployment Playbook
+# Automates: install Docker, build image, run container
+# ================================================================
+
+- name: Deploy GreenPulse Plant Tracker
+  hosts: localhost
+  connection: local
+  become: false
+
+  vars:
+    app_name: greenpulse
+    app_port: 5000
+    image_tag: latest
+
+  tasks:
+
+    - name: "📋 Print deployment info"
+      debug:
+        msg: "Deploying {{ app_name }} on port {{ app_port }}"
+
+    - name: "🔍 Check Docker is installed"
+      command: docker --version
+      register: docker_version
+      changed_when: false
+
+    - name: "📦 Show Docker version"
+      debug:
+        msg: "{{ docker_version.stdout }}"
+
+    - name: "🔨 Build Docker image"
+      command: docker build -t {{ app_name }}:{{ image_tag }} .
+      args:
+        chdir: "{{ playbook_dir }}/.."
+
+    - name: "🛑 Stop existing container (if running)"
+      command: docker stop {{ app_name }}
+      ignore_errors: true
+      changed_when: false
+
+    - name: "🗑️ Remove old container (if exists)"
+      command: docker rm {{ app_name }}
+      ignore_errors: true
+      changed_when: false
+
+    - name: "🚀 Start new container"
+      command: >
+        docker run -d
+        --name {{ app_name }}
+        -p {{ app_port }}:5000
+        --restart unless-stopped
+        {{ app_name }}:{{ image_tag }}
+
+    - name: "⏳ Wait for app to be healthy"
+      wait_for:
+        host: localhost
+        port: "{{ app_port }}"
+        delay: 2
+        timeout: 30
+
+    - name: "✅ Deployment complete"
+      debug:
+        msg: "GreenPulse is running at http://localhost:{{ app_port }}"

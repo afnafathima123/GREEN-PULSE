@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Add Plant — GreenPulse</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --soil: #1a1208; --bark: #2b1f0e; --moss: #1e3a1e;
+      --sprout: #4caf50; --lime: #a8e063; --cream: #f5f0e8; --muted: #8a7a60;
+      --serif: 'DM Serif Display', serif; --sans: 'DM Sans', sans-serif;
+    }
+    body { background: var(--soil); color: var(--cream); font-family: var(--sans); min-height: 100vh; }
+    nav {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1rem 2.5rem; background: rgba(26,18,8,0.85);
+      backdrop-filter: blur(14px); border-bottom: 1px solid rgba(168,224,99,0.12);
+    }
+    .brand { font-family: var(--serif); font-size: 1.4rem; color: var(--lime); text-decoration: none; }
+    .back { font-size: 0.82rem; color: var(--muted); text-decoration: none; transition: color 0.2s; }
+    .back:hover { color: var(--lime); }
+
+    .form-wrap { max-width: 560px; margin: 4rem auto; padding: 0 2rem 5rem; }
+    h1 { font-family: var(--serif); font-size: 2rem; margin-bottom: 0.5rem; }
+    .subtitle { color: var(--muted); font-size: 0.9rem; margin-bottom: 2.5rem; }
+
+    .form-card {
+      background: var(--bark); border: 1px solid rgba(168,224,99,0.12);
+      border-radius: 16px; padding: 2rem; display: flex; flex-direction: column; gap: 1.4rem;
+    }
+    label { display: block; font-size: 0.82rem; font-weight: 500; color: var(--lime); margin-bottom: 0.5rem; letter-spacing: 0.05em; }
+    input, select, textarea {
+      width: 100%; background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(168,224,99,0.15); border-radius: 8px;
+      padding: 0.75rem 1rem; color: var(--cream); font-family: var(--sans); font-size: 0.9rem;
+      outline: none; transition: border-color 0.2s;
+    }
+    input:focus, select:focus, textarea:focus { border-color: rgba(168,224,99,0.5); }
+    select option { background: #2b1f0e; }
+    textarea { resize: vertical; min-height: 80px; }
+
+    .emoji-row { display: flex; gap: 0.6rem; flex-wrap: wrap; }
+    .emoji-btn {
+      font-size: 1.6rem; padding: 0.4rem 0.6rem; border-radius: 8px;
+      border: 2px solid transparent; background: rgba(255,255,255,0.04);
+      cursor: pointer; transition: all 0.15s;
+    }
+    .emoji-btn:hover, .emoji-btn.selected { border-color: var(--lime); background: rgba(168,224,99,0.1); }
+
+    .submit-btn {
+      background: var(--sprout); color: var(--soil);
+      border: none; border-radius: 100px;
+      padding: 0.85rem 2rem; font-size: 1rem; font-weight: 600;
+      cursor: pointer; width: 100%; font-family: var(--sans);
+      transition: background 0.2s, transform 0.2s;
+    }
+    .submit-btn:hover { background: var(--lime); transform: translateY(-1px); }
+  </style>
+</head>
+<body>
+<nav>
+  <a href="/" class="brand">🌿 GreenPulse</a>
+  <a href="/" class="back">← Back to Garden</a>
+</nav>
+
+<div class="form-wrap">
+  <h1>🌱 Add a New Plant</h1>
+  <p class="subtitle">Tell us about your green companion.</p>
+
+  <form action="/add" method="POST" class="form-card">
+    <div>
+      <label>Plant Name</label>
+      <input type="text" name="name" placeholder="e.g. Monstera Deliciosa" required/>
+    </div>
+    <div>
+      <label>Category / Type</label>
+      <select name="type">
+        <option value="Tropical">Tropical</option>
+        <option value="Succulent">Succulent</option>
+        <option value="Herb">Herb</option>
+        <option value="Vegetable">Vegetable</option>
+        <option value="Flower">Flower</option>
+        <option value="Cactus">Cactus</option>
+        <option value="Tree">Tree</option>
+      </select>
+    </div>
+    <div>
+      <label>Initial Health (0–100)</label>
+      <input type="number" name="health" min="0" max="100" value="80"/>
+    </div>
+    <div>
+      <label>Notes / Observations</label>
+      <textarea name="notes" placeholder="How is it looking today?"></textarea>
+    </div>
+    <div>
+      <label>Choose an Emoji</label>
+      <input type="hidden" name="emoji" id="emojiInput" value="🌱"/>
+      <div class="emoji-row">
+        {% for e in ['🌱','🌿','🪴','🍀','🌵','🌸','🌻','🍅','🌾','🎋'] %}
+        <button type="button" class="emoji-btn" onclick="selectEmoji(this, '{{ e }}')">{{ e }}</button>
+        {% endfor %}
+      </div>
+    </div>
+    <button type="submit" class="submit-btn">Add to My Garden 🌿</button>
+  </form>
+</div>
+
+<script>
+  function selectEmoji(btn, val) {
+    document.querySelectorAll('.emoji-btn').forEach(b => b.classList.remove('selected'));
+    btn.classList.add('selected');
+    document.getElementById('emojiInput').value = val;
+  }
+  document.querySelector('.emoji-btn').classList.add('selected');
+</script>
+</body>
+</html>

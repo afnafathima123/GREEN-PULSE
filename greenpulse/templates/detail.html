@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>{{ plant.name }} — GreenPulse</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --soil: #1a1208; --bark: #2b1f0e; --moss: #1e3a1e; --leaf: #2d6a2d;
+      --sprout: #4caf50; --lime: #a8e063; --cream: #f5f0e8; --muted: #8a7a60;
+      --serif: 'DM Serif Display', serif; --sans: 'DM Sans', sans-serif;
+    }
+    body { background: var(--soil); color: var(--cream); font-family: var(--sans); min-height: 100vh; }
+    body::before {
+      content: ''; position: fixed; inset: 0;
+      background: radial-gradient(ellipse 70% 60% at 20% 30%, rgba(45,106,45,0.13) 0%, transparent 60%);
+      pointer-events: none;
+    }
+    nav {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1rem 2.5rem; background: rgba(26,18,8,0.85);
+      backdrop-filter: blur(14px); border-bottom: 1px solid rgba(168,224,99,0.12);
+      position: sticky; top: 0; z-index: 100;
+    }
+    .brand { font-family: var(--serif); font-size: 1.4rem; color: var(--lime); text-decoration: none; }
+    .back { font-size: 0.82rem; color: var(--muted); text-decoration: none; display:flex; align-items:center; gap:0.4rem; transition: color 0.2s; }
+    .back:hover { color: var(--lime); }
+
+    .detail-wrap { max-width: 720px; margin: 0 auto; padding: 3.5rem 2rem 5rem; position: relative; z-index: 1; }
+
+    .plant-hero {
+      background: var(--moss);
+      border: 1px solid rgba(168,224,99,0.15);
+      border-radius: 20px; padding: 3rem 2rem;
+      text-align: center; margin-bottom: 2rem;
+      position: relative; overflow: hidden;
+    }
+    .plant-hero::before {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(circle at 50% 50%, rgba(76,175,80,0.15) 0%, transparent 70%);
+    }
+    .plant-emoji { font-size: 6rem; display: block; margin-bottom: 1rem; position: relative; z-index: 1; }
+    .plant-type-badge {
+      display: inline-block; position: relative; z-index: 1;
+      background: rgba(168,224,99,0.12); border: 1px solid rgba(168,224,99,0.25);
+      color: var(--lime); font-size: 0.72rem; letter-spacing: 0.12em;
+      text-transform: uppercase; padding: 0.25rem 0.8rem; border-radius: 100px;
+      margin-bottom: 0.8rem; font-weight: 500;
+    }
+    .plant-title { font-family: var(--serif); font-size: 2.2rem; position: relative; z-index: 1; }
+
+    .info-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 1.5rem;
+    }
+    .info-card {
+      background: var(--bark); border: 1px solid rgba(168,224,99,0.1);
+      border-radius: 12px; padding: 1.2rem; text-align: center;
+    }
+    .info-icon { font-size: 1.5rem; margin-bottom: 0.5rem; }
+    .info-value { font-family: var(--serif); font-size: 1.5rem; color: var(--lime); display: block; }
+    .info-label { font-size: 0.72rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; }
+
+    .notes-card {
+      background: var(--bark); border: 1px solid rgba(168,224,99,0.1);
+      border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem;
+    }
+    .notes-heading { font-weight: 600; font-size: 0.85rem; color: var(--lime); margin-bottom: 0.7rem; }
+    .notes-text { font-size: 0.95rem; color: #b0a080; line-height: 1.7; }
+
+    .health-section { margin-bottom: 2rem; }
+    .health-header { display: flex; justify-content: space-between; font-size: 0.82rem; color: var(--muted); margin-bottom: 0.5rem; }
+    .health-bar { height: 8px; background: rgba(255,255,255,0.06); border-radius: 100px; overflow: hidden; }
+    .health-fill { height: 100%; background: linear-gradient(90deg, var(--sprout), var(--lime)); border-radius: 100px; }
+
+    .actions { display: flex; gap: 1rem; flex-wrap: wrap; }
+    .btn {
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      padding: 0.7rem 1.5rem; border-radius: 100px;
+      font-family: var(--sans); font-size: 0.9rem; font-weight: 500;
+      text-decoration: none; cursor: pointer; border: none; transition: all 0.2s;
+    }
+    .btn-green { background: var(--sprout); color: var(--soil); }
+    .btn-green:hover { background: var(--lime); transform: translateY(-1px); }
+    .btn-outline { background: transparent; border: 1px solid rgba(168,224,99,0.3); color: var(--lime); }
+    .btn-outline:hover { background: rgba(168,224,99,0.08); }
+
+    footer { text-align: center; padding: 2rem; border-top: 1px solid rgba(168,224,99,0.1); font-size: 0.75rem; color: var(--muted); }
+    footer span { color: var(--lime); }
+  </style>
+</head>
+<body>
+<nav>
+  <a href="/" class="brand">🌿 GreenPulse</a>
+  <a href="/" class="back">← Back to Garden</a>
+</nav>
+
+<div class="detail-wrap">
+  <div class="plant-hero">
+    <span class="plant-emoji">{{ plant.emoji }}</span>
+    <span class="plant-type-badge">{{ plant.type }}</span>
+    <h1 class="plant-title">{{ plant.name }}</h1>
+  </div>
+
+  <div class="info-grid">
+    <div class="info-card">
+      <div class="info-icon">❤️</div>
+      <span class="info-value">{{ plant.health }}%</span>
+      <span class="info-label">Health</span>
+    </div>
+    <div class="info-card">
+      <div class="info-icon">💧</div>
+      <span class="info-value" style="font-size:1rem; padding-top:0.3rem;">{{ plant.watered }}</span>
+      <span class="info-label">Last Watered</span>
+    </div>
+    <div class="info-card">
+      <div class="info-icon">🌿</div>
+      <span class="info-value">{{ plant.type }}</span>
+      <span class="info-label">Category</span>
+    </div>
+  </div>
+
+  <div class="health-section">
+    <div class="health-header"><span>Overall Health Score</span><span>{{ plant.health }} / 100</span></div>
+    <div class="health-bar"><div class="health-fill" style="width:{{ plant.health }}%"></div></div>
+  </div>
+
+  <div class="notes-card">
+    <div class="notes-heading">📝 Notes</div>
+    <div class="notes-text">{{ plant.notes if plant.notes else "No notes yet. Add some observations about this plant!" }}</div>
+  </div>
+
+  <div class="actions">
+    <a href="/water/{{ plant.id }}" class="btn btn-green">💧 Water This Plant</a>
+    <a href="/" class="btn btn-outline">← Back to Garden</a>
+  </div>
+</div>
+
+<footer>Built with <span>Flask · Docker · GitHub Actions · Terraform · Ansible</span></footer>
+</body>
+</html>
